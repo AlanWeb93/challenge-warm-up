@@ -1,13 +1,18 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 
 const Header = () => {
 
+    const logout = () => {
+        localStorage.removeItem('token');
+    }
+
     return (
         <Nav>
             <ul>
-                <li><a href="#">Inicio</a></li>
-                <li><a href="#">Cerrar Sesion</a></li>
+                <Link to="/home"><li>Inicio</li></Link>
+                <Link to="#" onClick={logout}><li>Cerrar Sesion</li></Link>
             </ul>
         </Nav>
     )

@@ -3,17 +3,29 @@ import styled from 'styled-components'
 import CloseIcon from '@material-ui/icons/Close';
 import {EditOutlined} from '@material-ui/icons';
 import { Modal } from '@material-ui/core';
+import { removePost } from '../functions/requests';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectPosts, postToUpdate } from '../features/appSlice';
+import { useHistory } from 'react-router';
 
 const Post = ({post}) => {
-
     const [open, setOpen] = useState(false);
+    const history = useHistory();
+
+    const dispatch = useDispatch();
+    const posts = useSelector(selectPosts);
 
     const remove = () => {
-        console.log('remove');
+        removePost(post.id, posts, dispatch);
     }
 
     const edit = () => {
-        console.log('edit');
+        dispatch(
+            postToUpdate({
+                post
+            })
+        );
+        history.push(`/detail/${post.id}`);
     }
 
     const handleOpen = () => {

@@ -2,17 +2,19 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Header from '../components/Header';
 import Post from '../components/Post';
-import { getPosts } from '../functions/requests';
+import { addPost, getPosts } from '../functions/requests';
 import { useFormik } from 'formik';
-import swal from 'sweetalert';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectPosts } from '../features/appSlice';
 
 const Home = () => {
-    const [posts, setPosts] = useState([]);
-
+    const posts = useSelector(selectPosts);
+    const dispatch = useDispatch();
+    
     useEffect(() => {
-        getPosts(setPosts);
-    }, []);
+        getPosts(dispatch);
+    }, [dispatch]);
 
     const formik = useFormik({
         initialValues: {
@@ -21,12 +23,16 @@ const Home = () => {
         },
         validationSchema: Yup.object({
             title: Yup.string()
-                .required('El titulo es obligatorio'),
+                .required('El titulo es obligatorio')
+                .trim(),
             content: Yup.string()
                 .required('El contenido es obligatorio')
+                .trim()
         }),
-        onSubmit: async valores => {
-            
+        onSubmit: valores => {
+            addPost(valores, dispatch);
+            valores.title = '';
+            valores.content = '';
         }
     });
     
@@ -38,12 +44,13 @@ const Home = () => {
                     <h4>Posts</h4>
                     <ScrollPost>
                         {
-                            posts?.map(p => <Post key={p.id} post={p} />)
+                            posts.payload?.map(p => <Post key={p.id} post={p} />)
+                            //console.log(posts.payload)
                         }
                     </ScrollPost>
                 </Posts>
 
-                <CreatePost className="home__search">
+                <CreatePost>
                     <h4>Crear Post</h4>
 
                     <Form onSubmit={formik.handleSubmit}>
@@ -71,6 +78,7 @@ const Home = () => {
                                 value={formik.values.content}
                                 onChange={formik.handleChange} 
                                 placeholder="Contenido"
+                                rows="6"
                             />
                             
                         </Campo>
@@ -189,6 +197,10 @@ const Submit = styled.div`
         font-size: 1rem;
         padding: 1rem 0;
         cursor: pointer;
+
+        &:hover {
+            background-color: #454545;
+        }
     }
 
 `;
