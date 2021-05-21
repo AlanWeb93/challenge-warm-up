@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
 import { selectPost } from '../features/appSlice';
 import { getPost, updatePost } from '../functions/requests';
+import NotFound from '../components/NotFound';
 
 const Detail = ({match}) => {
     const post = useSelector(selectPost);
@@ -13,7 +14,7 @@ const Detail = ({match}) => {
     
     useEffect(() => {
         getPost(match.params.id, setExist); 
-    }, []);
+    }, [match.params.id]);
 
     const formik = useFormik({
         initialValues: {
@@ -38,51 +39,53 @@ const Detail = ({match}) => {
         <>
             <Header />
             {
-                exist ? <p>Existe</p> : <p>No Existe</p>
+                exist ? (
+                    <Container>
+                        <Form onSubmit={formik.handleSubmit}>
+                            <legend>Editar Post</legend>
+                            <Campo>
+                                <input 
+                                    type="text" 
+                                    id="title"
+                                    value={formik.values.title}
+                                    onChange={formik.handleChange} 
+                                    placeholder="Titulo"
+                                />
+                            </Campo>
+                            {
+                                formik.touched.title && formik.errors.title ? (
+                                    <Error>
+                                        <p>{formik.errors.title}</p>
+                                    </Error>
+                                ) : null
+                            }
+                            <br/>
+                            <Campo>
+                                <textarea 
+                                    type="text"
+                                    id="content"
+                                    rows="6"
+                                    value={formik.values.content}
+                                    onChange={formik.handleChange} 
+                                    placeholder="Contenido"
+                                />
+                                
+                            </Campo>
+                            {
+                                formik.touched.password && formik.errors.password ? (
+                                    <Error>
+                                        <p>{formik.errors.password}</p>
+                                    </Error>
+                                ) : null
+                            }
+                            <Submit>
+                                <input type="submit" value="Editar" />
+                            </Submit>
+                        </Form>
+                    </Container>
+                ) : <NotFound />
             }
-            <Container>
-                <Form onSubmit={formik.handleSubmit}>
-                    <legend>Editar Post</legend>
-                    <Campo>
-                        <input 
-                            type="text" 
-                            id="title"
-                            value={formik.values.title}
-                            onChange={formik.handleChange} 
-                            placeholder="Titulo"
-                        />
-                    </Campo>
-                    {
-                        formik.touched.title && formik.errors.title ? (
-                            <Error>
-                                <p>{formik.errors.title}</p>
-                            </Error>
-                        ) : null
-                    }
-                    <br/>
-                    <Campo>
-                        <textarea 
-                            type="text"
-                            id="content"
-                            rows="6"
-                            value={formik.values.content}
-                            onChange={formik.handleChange} 
-                            placeholder="Contenido"
-                        />
-                        
-                    </Campo>
-                    {
-                        formik.touched.password && formik.errors.password ? (
-                            <Error>
-                                <p>{formik.errors.password}</p>
-                            </Error>
-                        ) : null
-                    }
-                    <Submit>
-                        <input type="submit" value="Editar" />
-                    </Submit>
-                </Form>
-            </Container>
+            
         </>
     )
 }

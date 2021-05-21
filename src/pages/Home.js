@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import Header from '../components/Header';
 import Post from '../components/Post';
@@ -40,15 +40,7 @@ const Home = () => {
         <>
             <Header />
             <Container>
-                <Posts>
-                    <h4>Posts</h4>
-                    <ScrollPost>
-                        {
-                            posts.payload?.map(p => <Post key={p.id} post={p} />)
-                            //console.log(posts.payload)
-                        }
-                    </ScrollPost>
-                </Posts>
+                
 
                 <CreatePost>
                     <h4>Crear Post</h4>
@@ -95,45 +87,79 @@ const Home = () => {
                     </Form>
 
                 </CreatePost>
+                <Posts>
+                    <h4>Posts</h4>
+                    <ScrollPost>
+                        {
+                            posts.payload?.map(p => <Post key={p.id} post={p} />)
+                            //console.log(posts.payload)
+                        }
+                    </ScrollPost>
+                </Posts>
             </Container>
         </>
     )
 }
 
 const Container = styled.div`
-    display: flex;
-    margin: 10px;
-    height: 90vh;
+
+    @media (min-width: 650px) {
+        display: flex;
+        margin: 10px;
+        height: 90vh;
+    }
+    
 `;
 
 const Posts = styled.div`
     display: flex;
     flex-direction: column;
-    width: 65%;
-    margin-right: 5px;
+    margin-left: 5px;
 
     h4 {
         text-align: center;
+        margin-top: 5px;
     }
+
+    @media (min-width: 650px) {
+        display: flex;
+        flex-direction: column;
+        width: 65%;
+        margin-left: 5px;
+
+        h4 {
+            text-align: center;
+        }
+    }
+    
 `;
 
 const ScrollPost = styled.div`
-    overflow-y: scroll;
+    @media (min-width: 650px) {
+        overflow-y: scroll;
+    }
 `;
 
 const CreatePost = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 35%;
-
     h4 {
         text-align: center;
+        margin-top: 5px;
+    }
+
+    @media (min-width: 650px) {
+        display: flex;
+        flex-direction: column;
+        width: 35%;
+
+        h4 {
+            text-align: center;
+        }
     }
 `;
 
 const Form = styled.form`
     width: 100%;
-    margin-left: 5px;
+    margin-right: 5px;
 
     background-color: rgba(0,0,0, 0.85);
     padding: 1px 1px;

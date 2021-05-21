@@ -12,7 +12,7 @@ const Login = ({history}) => {
         if (token) {
             history.push("/home");
         }
-    }, []);
+    }, [history]);
 
     const formik = useFormik({
         initialValues: {
@@ -198,6 +198,10 @@ const Submit = styled.div`
         font-size: 1rem;
         padding: 1rem 0;
         cursor: pointer;
+
+        &:hover {
+            background-color: #454545;
+        }
     }
 
 `;

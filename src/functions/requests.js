@@ -27,7 +27,6 @@ export const addPost = async ({title, content}, dispatch) => {
         body: content
     })
     .then(res => {
-        console.log(res.data);
         dispatch(
             add({
                 id: res.data.id,
@@ -66,7 +65,6 @@ export const updatePost = async ({title, content, id}) => {
 export const getPost = async (id, setExist) => {
     await axios.get(`https://jsonplaceholder.typicode.com/posts/${id}`)
         .then(res => {
-            console.log(res);
             setExist(true);
         })
         .catch(err => {

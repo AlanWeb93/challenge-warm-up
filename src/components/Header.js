@@ -1,11 +1,20 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react'
+import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components'
 
 const Header = () => {
+    const history = useHistory();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            history.push("/");
+        }
+    }, [history]);
 
     const logout = () => {
         localStorage.removeItem('token');
+        history.push("/");
     }
 
     return (
